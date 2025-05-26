@@ -1,37 +1,60 @@
 
 import streamlit as st
-st.set_page_config(page_title="문서 작성 예제", layout="centered")
 
-# 제목
-st.title("📘 Streamlit 문서 작성 예제")
+# --- 사이드바 (슬라이더) ---
+st.sidebar.title("슬라이더")
+slider_val1 = st.sidebar.slider("레이아웃 1", 0, 100, 50)
+slider_val2 = st.sidebar.slider("레이아웃 3", 0, 1000, 10)
 
-# 섹션
-st.header("1. 기본 텍스트 출력")
+# --- empty ---
+placeholder = st.empty()
 
-st.write("이것은 `st.write()`를 사용한 텍스트입니다.")
-st.text("이것은 형식 없는 텍스트입니다.")
+# --- 탭 구성 ---
+tab1, tab2, tab3 = st.tabs(["탭 01", "탭 02", "탭 03"])
 
-# 마크다운 사용
-st.markdown("**굵은 글씨**와 *기울임 글씨* 사용하기")
-st.markdown("> 인용구 스타일")
+with tab1:
+    st.write("탭 01 내용")
 
-# 코드 블록 출력
-st.code("""
-def hello():
-    print("Hello, Streamlit!")
-""", language='python')
+    # 2x2 레이아웃 구성
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("### 🧱 레이아웃 01")
+        st.info(f"슬라이더 값: {slider_val1}")
+    with col2:
+        st.markdown("### 🧱 레이아웃 02")
+        with st.expander("expander"):
+          st.write("expander로 숨겨진 내용")
 
-# 표 출력
-st.header("2. 표 출력")
-import pandas as pd
-df = pd.DataFrame({
-    "이름": ["홍길동", "이몽룡"],
-    "나이": [29, 34]
-})
-st.dataframe(df)
+    col3, col4 = st.columns(2)
+    with col3:
+        st.markdown("### 🧱 레이아웃 03")
+        st.info(f"슬라이더 값: {slider_val2}")
+    with col4:
+        st.markdown("### 🧱 레이아웃 04")
+        if st.button("누르면 바뀜"):
+            placeholder.success("버튼이 눌렸습니다!")
+        else:
+            placeholder.warning("아직 버튼을 누르지 않았어요.")
 
-# 이미지 출력
-st.header("3. 이미지 출력")
+with tab2:
+    st.write("탭 02 내용")
+    # 컨테이너 1 - 요약 영역
+    with st.container():
+        st.subheader("1️⃣ KPI 요약")
+        col1, col2, col3 = st.columns(3)
+        col1.metric("매출", "₩120,000")
+        col2.metric("주문", "58건")
+        col3.metric("고객 수", "34명")
 
-st.image("https://i.namu.wiki/i/4El7Omx8MUNbvgPh06rSi50cTR5HI9QF3x8KuRAibfxEj6z-3Yqo19bi7pFUwyo73MaFIyibjmyibkq3Z8yzuXfFpPZ4siVz_OjZhEsyDmlSc6sb4Bq5OFsqW28zfqBWKgg5pVqwTIt4tcB6vjVR_Q.webp", width=300)
+with tab3:
+    st.write("탭 03 내용")
+    import pandas as pd
+
+    df = pd.DataFrame({
+        "과목": ["수학", "영어", "과학"],
+        "점수": [90, 85, 95]
+    })
+
+    st.dataframe(df)
+
 
